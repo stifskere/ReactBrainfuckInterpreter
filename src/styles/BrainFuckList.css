@@ -1,0 +1,49 @@
+
+.BrainFuckListBackground {
+    height: 12%;
+
+    display: flex;
+    justify-content: space-evenly;
+
+    background-color: var(--primaryItems);
+
+    border-radius: 8px;
+}
+
+.BrainFuckListItem {
+    background-color: var(--secondaryBackground);
+
+    flex-grow: 1;
+
+    margin: 0.5vw 1vw 0.5vw 1vw;
+
+    border-radius: 8px;
+
+    font-size: 6vh;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+.BrainFuckListSelectedItem {
+    outline: 10px solid var(--secondaryItems);
+}
+
+.BrainFuckListIndex {
+    font-size: 4vh;
+    font-weight: bolder;
+
+    margin-bottom: 0;
+    margin-top: auto;
+
+    text-align: center;
+}
+
+.BrainFuckListIndex > p {
+    margin: 0;
+}
+

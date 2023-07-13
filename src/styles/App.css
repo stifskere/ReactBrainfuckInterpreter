@@ -1,0 +1,125 @@
+
+.AppTextInput {
+    outline-width: 0;
+
+    flex-grow: 1;
+
+    font-size: 5vh;
+    font-weight: bold;
+
+    border-color: var(--primaryItems);
+}
+
+.AppButton {
+    border-color: transparent;
+    background-color: var(--primaryItems);
+    color: white;
+
+    padding-left: 1vw;
+    padding-right: 1vw;
+
+    font-size: 1em;
+}
+
+.AppButton:hover {
+    background-color: var(--secondaryItems);
+}
+
+.AppBrainFuckInput {
+    width: auto;
+    height: 7%;
+
+    display: flex;
+    box-sizing: border-box;
+
+    margin: 3vh 2vw;
+}
+
+.BoxRight {
+    border-radius: 0 8px 8px 0;
+}
+
+.BoxMiddle {
+    border-radius: 0 0 0 0;
+}
+
+.BoxLeft {
+    border-radius: 8px 0 0 8px;
+}
+
+.AppBrainFuckList {
+    margin: 1vw 2vw 1vw 2vw;
+}
+
+.AppBrainFuckOutput {
+    background-color: white;
+
+    resize: none;
+
+    outline: transparent;
+    border-color: transparent;
+    border-radius: 8px;
+
+    width: 44.75%;
+    height: 100%;
+
+    margin: 3vh 2vw;
+
+    padding-left: 1vw;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.AppBottom {
+    display: flex;
+    flex: 1 1 0;
+
+    height: 58%;
+}
+
+.AppButtonNumberInput {
+    border: 0;
+
+    width: 3vw;
+}
+
+.AppDelayTooltip {
+    position: relative;
+
+    height: 96%;
+}
+
+.AppTooltip {
+    visibility: hidden;
+
+    position: absolute;
+    z-index: 1;
+
+    transform: translate(-70%, 200%);
+
+    background-color: white;
+
+    border-radius: 8px;
+    border: 3px solid black;
+
+    height: 3vh;
+    width: 10vw;
+
+    text-align: center;
+
+    opacity: 0;
+
+    transition: opacity 1s ease;
+}
+
+.AppDelayTooltip:hover + .AppTooltip {
+    visibility: visible;
+
+    opacity: 1;
+}
+
+.HighLightedInputCharacter {
+    color: var(--primaryItems);
+    font-weight: bolder;
+}
