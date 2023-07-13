@@ -21,7 +21,7 @@ To get started with the Brainfuck interpreter, follow these steps:
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/your-username/react-brainfuck-interpreter.git
+   git clone https://github.com/stifskere/ReactBrainfuckInterpreter
    ```
    
 2. Move the working directory to the project root

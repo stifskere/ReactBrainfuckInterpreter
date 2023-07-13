@@ -1,11 +1,13 @@
 import './styles/App.css';
-
+import './styles/Markdown.css'
 import {FormEvent, ReactElement, ClipboardEvent, useState} from "react";
 import BrainFuckList from "./components/BrainFuckList";
 import { Global } from "./Modules/Global";
 import "./styles/Alert.css"
 import ReactMarkdown from "react-markdown";
 import highlightCharacter = Global.highlightCharacter;
+import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
+import {atomDark as theme} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function App(): ReactElement {
   async function InputSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -14,8 +16,8 @@ function App(): ReactElement {
     const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
 
     if (Global.hasUnclosedLoops(element.value)) {
+
         await Global.CustomAlert("Error", "The code contains loops which are not closed.");
-        event.stopPropagation();
         return;
     }
   }
@@ -66,7 +68,22 @@ function App(): ReactElement {
     </form>
       <div className="AppBottom">
           <textarea id="AppBrainFuckOutput" className="AppBrainFuckOutput" readOnly={true} style={{fontSize: "4vh"}}/>
-          <ReactMarkdown children={manualContent} className="AppBrainFuckOutput"/>
+          <ReactMarkdown children={manualContent} className="AppBrainFuckOutput" components={{code({node, inline, className, children, ...props}) {
+                  const match = /language-(\w+)/.exec(className || '')
+                  return !inline && match ? (
+                      <SyntaxHighlighter
+                          {...props}
+                          children={String(children).replace(/\n$/, '')}
+                          style={theme}
+                          language={match[1]}
+                          PreTag="div"
+                      />
+                  ) : (
+                      <code {...props} className={className}>
+                          {children}
+                      </code>
+                  )
+              }}} />
       </div>
   </>)
 }
