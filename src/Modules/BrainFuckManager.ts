@@ -6,7 +6,8 @@ class BrainFuckManager {
     current: number = 0;
     updateIntervalId: string;
     outputCharacters: string = "";
-    instanceAlreadyRunning: boolean = false;
+    private instanceAlreadyRunning: boolean = false;
+    private stop: boolean = false;
 
     constructor(onUpdate: (instruction: number, index: number, output: string) => void, updateIntervalId: string) {
         this.onUpdate = onUpdate;
@@ -24,8 +25,13 @@ class BrainFuckManager {
         return value;
     }
 
-    async runBrainFuck(code: string) {
+    stopCurrentExecution(): void {
         if (this.instanceAlreadyRunning)
+            this.stop = true;
+    }
+
+    async runBrainFuck(code: string) {
+        if (this.instanceAlreadyRunning || Global.hasUnclosedLoops(code))
             return;
 
         this.instanceAlreadyRunning = true;
@@ -33,6 +39,11 @@ class BrainFuckManager {
         const stack: Array<number> = [];
 
         for (let i = 0; i < code.length; i++) {
+            if (this.stop) {
+                this.stop = false;
+                break;
+            }
+
             switch (code[i]) {
                 case ">":
                     this.current++;

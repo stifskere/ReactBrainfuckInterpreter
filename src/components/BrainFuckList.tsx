@@ -32,7 +32,13 @@ function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIn
                });
            (document.getElementById(runButtonId) as HTMLButtonElement)
                .addEventListener('click', async () => {
+                   if ((document.getElementById(runButtonId) as HTMLButtonElement).value === "stop") {
+                       bfManager.current.stopCurrentExecution();
+                       return;
+                   }
+
                    await bfManager.current.runBrainFuck((document.getElementById(inputId) as HTMLInputElement).value);
+
                });
        } 
        

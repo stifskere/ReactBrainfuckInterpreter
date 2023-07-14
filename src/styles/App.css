@@ -123,3 +123,11 @@
     color: var(--primaryItems);
     font-weight: bolder;
 }
+
+.AppStopButton {
+    background-color: red;
+}
+
+.AppStopButton:hover {
+    background-color: darkred;
+}
