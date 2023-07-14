@@ -32,8 +32,12 @@ function App(): ReactElement {
 
     function InputWriteCharacter(): void {
         const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
-        if (!"><+-[],.".includes(element.value[element.value.length - 1]))
-            element.value = element.value!.slice(0, -1);
+        if (!"><+-[],.".includes(element.value[element.selectionStart! - 1])) {
+            const selStart = element.selectionStart! - 1;
+            element.value = element.value!.slice(0, selStart) + element.value.slice(element.selectionStart!);
+            element.selectionStart = selStart;
+            element.selectionEnd = selStart;
+        }
     }
 
     function InputPasteCharacter(event: ClipboardEvent<HTMLInputElement>): void {
