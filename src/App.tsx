@@ -1,5 +1,5 @@
 import './styles/App.css';
-import {FormEvent, ReactElement, ClipboardEvent, useState} from "react";
+import {FormEvent, ReactElement, ClipboardEvent, useState, useEffect} from "react";
 import BrainFuckList from "./components/BrainFuckList";
 import {Global} from "./Modules/Global";
 import "./styles/Alert.css"
@@ -63,9 +63,21 @@ function App(): ReactElement {
         return await (await fetch("https://gist.githubusercontent.com/roachhd/dce54bec8ba55fb17d3a/raw/31683f81a80b83bee3eaf7f9e64cd2f5fc99e59e/README.md")).text()
     })().then(r => setManualContent(r)).catch(() => "Error while loading.");
 
+    useEffect(() => {
+        const runningTitles: Array<string> = ["Interpreter", "++[->+<]>", "Haha program go brr", "you said ++?", "why are you even...", "Making useful programs"];
+        let i = 0;
+
+        document.title = `Brainfuck - ${runningTitles[i++]}`;
+
+        const interval = setInterval(() => {
+            document.title = `Brainfuck - ${runningTitles[i = (i + 1) % runningTitles.length]}`;
+        }, 3000);
+
+        return () => clearInterval(interval);
+    });
+
     return (<>
-        <BrainFuckList className="AppBrainFuckList" resetButtonId="AppResetBrainFuck" runButtonId="AppRunOverBrainFuck"
-                       inputId="AppBrainFuckInput" onUpdate={onUpdateBrainFuck} updateIntervalId="AppSpeedControl"/>
+        <BrainFuckList className="AppBrainFuckList" resetButtonId="AppResetBrainFuck" runButtonId="AppRunOverBrainFuck" inputId="AppBrainFuckInput" onUpdate={onUpdateBrainFuck} updateIntervalId="AppSpeedControl"/>
         <form className="AppBrainFuckInput" onSubmit={InputSubmit}>
             <input className="AppTextInput BoxLeft" id="AppBrainFuckInput" type="text" required={true}
                    onInput={InputWriteCharacter} onPaste={InputPasteCharacter}/>
