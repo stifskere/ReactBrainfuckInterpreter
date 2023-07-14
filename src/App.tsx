@@ -48,11 +48,14 @@ function App(): ReactElement {
         element.value += data.join("");
     }
 
-    function onUpdateBrainFuck(instruction: number, index: number, output: string) {
+    function onUpdateBrainFuck(instruction: number, index: number, output: string, last: boolean) {
         const textArea: HTMLTextAreaElement = document.getElementById("AppBrainFuckOutput") as HTMLTextAreaElement;
         textArea.value = output;
 
         highlightCharacter(instruction, "AppBrainFuckInput");
+
+        if (last)
+            setCurrentlyRunning(false);
     }
 
     const [manualContent, setManualContent] = useState("loading...");
@@ -71,7 +74,7 @@ function App(): ReactElement {
                        type="number" defaultValue={100}/>
                 <span className="AppTooltip">Millisecond delay</span>
             </div>
-            <input className="AppButton BoxMiddle" id="AppResetBrainFuck" type="button" value="reset" onClick={Reset}/>
+            <input className={`${currentlyRunning ? "AppDisabledButton" : "AppButton"} BoxMiddle`} id="AppResetBrainFuck" type="button" value="reset" onClick={Reset} disabled={currentlyRunning}/>
             <input className={`AppButton BoxRight ${currentlyRunning ? "AppStopButton" : ""}`} id="AppRunOverBrainFuck" type="submit" value={!currentlyRunning ? "run over" : "stop"}/>
         </form>
         <div className="AppBottom">

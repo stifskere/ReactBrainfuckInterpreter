@@ -8,14 +8,14 @@ interface IBrainFuckListArguments extends Global.IStyleArgument {
     runButtonId: string;
     inputId: string;
     updateIntervalId: string;
-    onUpdate?: (instruction: number, index: number, output: string) => void;
+    onUpdate?: (instruction: number, index: number, output: string, last: boolean) => void;
 }
 
 function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIntervalId, onUpdate = () => {}}: IBrainFuckListArguments): ReactElement {
 
-    const onListUpdate = useCallback((instruction: number, index: number, output: string) => {
+    const onListUpdate = useCallback((instruction: number, index: number, output: string, last: boolean) => {
         setCurrentList(bfManager.current.getCurrentArray);
-        onUpdate(instruction, index, output);
+        onUpdate(instruction, index, output, last);
     }, [onUpdate]);
 
     let bfManager: MutableRefObject<BrainFuckManager> = useRef(new BrainFuckManager(onListUpdate, updateIntervalId));

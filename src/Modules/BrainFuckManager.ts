@@ -1,7 +1,7 @@
 import {Global} from "./Global";
 
 class BrainFuckManager {
-    onUpdate: (instruction: number, index: number, output: string) => void;
+    onUpdate: (instruction: number, index: number, output: string, last: boolean) => void;
     array: Array<number> = Array(30000).fill(0);
     current: number = 0;
     updateIntervalId: string;
@@ -9,7 +9,7 @@ class BrainFuckManager {
     private instanceAlreadyRunning: boolean = false;
     private stop: boolean = false;
 
-    constructor(onUpdate: (instruction: number, index: number, output: string) => void, updateIntervalId: string) {
+    constructor(onUpdate: (instruction: number, index: number, output: string, last: boolean) => void, updateIntervalId: string) {
         this.onUpdate = onUpdate;
         this.updateIntervalId = updateIntervalId;
     }
@@ -105,7 +105,7 @@ class BrainFuckManager {
             }
 
             await Global.Delay(parseInt((document.getElementById(this.updateIntervalId) as HTMLInputElement).value));
-            this.onUpdate(i, this.current, this.outputCharacters);
+            this.onUpdate(i, this.current, this.outputCharacters, i === code.length - 1);
         }
 
         this.instanceAlreadyRunning = false;

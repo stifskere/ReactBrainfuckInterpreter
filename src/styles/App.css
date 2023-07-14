@@ -25,6 +25,17 @@
     background-color: var(--secondaryItems);
 }
 
+.AppDisabledButton {
+    border-color: transparent;
+    background-color: var(--secondaryItems);
+    color: white;
+
+    padding-left: 1vw;
+    padding-right: 1vw;
+
+    font-size: 1em;
+}
+
 .AppBrainFuckInput {
     width: auto;
     height: 7%;
