@@ -112,9 +112,9 @@ export namespace Global {
         });
     }
 
-    //maybe further implementation, but this useless XD
-    export function highlightCharacter(index: number, inputId: string) {
-        const input: HTMLInputElement = document.getElementById(inputId) as HTMLInputElement;
-        input.innerHTML = input.value.substring(0, index) + '<span class="HighLightedInputCharacter">' + input.value.charAt(index) + '</span>' + input.value.substring(index + 1);
+    export function highlightCharacter(index: number, inputId: string): void {
+        const input: HTMLElement = document.getElementById(inputId)!;
+        if (input instanceof HTMLDivElement)
+            input.innerHTML = `${input.textContent!.slice(0, index)}<span class="HighLightedInputCharacter">${input.textContent![index]}</span>${input.textContent!.slice(index + 1)}`;
     }
 }

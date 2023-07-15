@@ -4,14 +4,13 @@ class BrainFuckManager {
     onUpdate: (instruction: number, index: number, output: string, last: boolean) => void;
     array: Array<number> = Array(30000).fill(0);
     current: number = 0;
-    updateIntervalId: string;
     outputCharacters: string = "";
+    private updateIntervalId: {ref: number} = {ref: 100};
     private instanceAlreadyRunning: boolean = false;
     private stop: boolean = false;
 
-    constructor(onUpdate: (instruction: number, index: number, output: string, last: boolean) => void, updateIntervalId: string) {
+    constructor(onUpdate: (instruction: number, index: number, output: string, last: boolean) => void) {
         this.onUpdate = onUpdate;
-        this.updateIntervalId = updateIntervalId;
     }
 
     get getCurrentArray(): Array<number | null> {
@@ -23,6 +22,10 @@ class BrainFuckManager {
                 value.push(this.array[i]);
         }
         return value;
+    }
+
+    set setUpdateInteval(value: number) {
+        this.updateIntervalId.ref = value;
     }
 
     stopCurrentExecution(): void {
@@ -104,7 +107,7 @@ class BrainFuckManager {
                     break;
             }
 
-            await Global.Delay(parseInt((document.getElementById(this.updateIntervalId) as HTMLInputElement).value));
+            await Global.Delay(this.updateIntervalId.ref);
             this.onUpdate(i, this.current, this.outputCharacters, i === code.length - 1);
         }
 

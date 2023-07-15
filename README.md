@@ -41,10 +41,11 @@ To get started with the Brainfuck interpreter, follow these steps:
 Once you have the interpreter up and running, you can start writing and executing Brainfuck programs. Here's a quick overview of the available features:
 
 - **Not that rich of an editor**: it's an HTML input element, nothing else.
-- **Run and reset button**: You can obviously run your brainfuck code and reset the memory without losing your changes
+- **Run and reset and stop button**: You can obviously run your brainfuck code and reset the memory without losing your changes
 - **Input**: The , instruction will spawn a modal, you can input text
 - **Output**: The program has an output for the . instruction.
 - **Stolen manual**: You can always check reference right next to your program output.
+- **Cursor**: When running the program there will be a cursor that shows the instruction being run.
 
 Feel free to explore the interface and experiment with different Brainfuck programs!
 
@@ -52,6 +53,6 @@ Feel free to explore the interface and experiment with different Brainfuck progr
 
 Contributions are welcome! If you find a bug or have a feature request, please open an issue on the GitHub repository. If you would like to contribute code, fork the repository, create a new branch, and submit a pull request.
 
-## Addition
+### Addition
 
 This readme was half made with ChatGPT because I was lazy to make a readme.

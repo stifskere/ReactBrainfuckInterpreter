@@ -18,7 +18,7 @@ function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIn
         onUpdate(instruction, index, output, last);
     }, [onUpdate]);
 
-    let bfManager: MutableRefObject<BrainFuckManager> = useRef(new BrainFuckManager(onListUpdate, updateIntervalId));
+    let bfManager: MutableRefObject<BrainFuckManager> = useRef(new BrainFuckManager(onListUpdate));
 
     const arrInitialState: Array<number | null> = useMemo(() => [...Array(5).fill(null), ...Array(6).fill(0)], []);
     const [getCurrentList, setCurrentList] = useState(arrInitialState);
@@ -27,7 +27,7 @@ function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIn
        function onPageLoad(): void {
            (document.getElementById(resetButtonId) as HTMLButtonElement)
                .addEventListener('click', () => {
-                   bfManager.current = new BrainFuckManager(onListUpdate, updateIntervalId);
+                   bfManager.current = new BrainFuckManager(onListUpdate);
                    setCurrentList(arrInitialState);
                });
            (document.getElementById(runButtonId) as HTMLButtonElement)
@@ -39,6 +39,12 @@ function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIn
 
                    await bfManager.current.runBrainFuck((document.getElementById(inputId) as HTMLInputElement).value);
 
+               });
+           (document.getElementById(updateIntervalId) as HTMLInputElement)
+               .addEventListener('blur', () => {
+                   const num = (document.getElementById(updateIntervalId) as HTMLInputElement).valueAsNumber;
+                   if (num < 0) return;
+                   bfManager.current.setUpdateInteval = num;
                });
        } 
        

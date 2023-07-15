@@ -10,6 +10,24 @@
     border-color: var(--primaryItems);
 }
 
+.AppDivInput {
+    background-color: var(--secondaryBackground);
+
+    width: 100%;
+    height: 100%;
+
+    font-size: 5vh;
+    font-weight: bold;
+
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.AppDivInput::-webkit-scrollbar {
+    display: none;
+}
+
 .AppButton {
     border-color: transparent;
     background-color: var(--primaryItems);

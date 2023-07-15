@@ -1,22 +1,22 @@
 import './styles/App.css';
-import {FormEvent, ReactElement, ClipboardEvent, useState, useEffect} from "react";
+import {FormEvent, ReactElement, ClipboardEvent, useState, useEffect, useRef, MutableRefObject} from "react";
 import BrainFuckList from "./components/BrainFuckList";
 import {Global} from "./Modules/Global";
 import "./styles/Alert.css"
 import ReactMarkdown from "react-markdown";
-import highlightCharacter = Global.highlightCharacter;
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {atomDark as theme} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function App(): ReactElement {
     const [currentlyRunning, setCurrentlyRunning] = useState(false);
+    const currentInput: MutableRefObject<string> = useRef("");
 
     async function InputSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
         const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
 
-        if (Global.hasUnclosedLoops(element.value)) {
+        if (!currentlyRunning && Global.hasUnclosedLoops(element.value)) {
             setCurrentlyRunning(false);
             await Global.CustomAlert("Error", "The code contains loops which are not closed.");
             return;
@@ -38,10 +38,12 @@ function App(): ReactElement {
             element.selectionStart = selStart;
             element.selectionEnd = selStart;
         }
+        currentInput.current = element.value;
     }
 
     function InputPasteCharacter(event: ClipboardEvent<HTMLInputElement>): void {
         event.preventDefault();
+
         let data: Array<string> = event.clipboardData.getData("text").split("");
 
         for (let i = 0; i < data.length; i++)
@@ -50,22 +52,25 @@ function App(): ReactElement {
 
         const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
         element.value += data.join("");
+
+        currentInput.current = element.value;
     }
 
     function onUpdateBrainFuck(instruction: number, index: number, output: string, last: boolean) {
         const textArea: HTMLTextAreaElement = document.getElementById("AppBrainFuckOutput") as HTMLTextAreaElement;
         textArea.value = output;
 
-        highlightCharacter(instruction, "AppBrainFuckInput");
+        Global.highlightCharacter(instruction, "AppBrainFuckInput");
 
         if (last)
             setCurrentlyRunning(false);
     }
 
     const [manualContent, setManualContent] = useState("loading...");
+    const manualUrl: string = "https://gist.githubusercontent.com/roachhd/dce54bec8ba55fb17d3a/raw/31683f81a80b83bee3eaf7f9e64cd2f5fc99e59e/README.md";
     (async () => {
-        return await (await fetch("https://gist.githubusercontent.com/roachhd/dce54bec8ba55fb17d3a/raw/31683f81a80b83bee3eaf7f9e64cd2f5fc99e59e/README.md")).text()
-    })().then(r => setManualContent(r)).catch(() => "Error while loading.");
+        return await (await fetch(manualUrl)).text()
+    })().then(r => setManualContent(r)).catch(() => setManualContent(`# Error while loading.\n[Navigate manually](${manualUrl})`));
 
     useEffect(() => {
         const runningTitles: Array<string> = ["Interpreter", "++[->+<]>", "Haha program go brr", "you said ++?", "why are you even...", "Making useful programs"];
@@ -80,14 +85,23 @@ function App(): ReactElement {
         return () => clearInterval(interval);
     });
 
+    const [speedControlValue, setSpeedControlValue] = useState(100);
+    function onInputSpeed(): void {
+        const speedControl: HTMLInputElement = document.getElementById("AppSpeedControl") as HTMLInputElement;
+        setSpeedControlValue(speedControl.valueAsNumber = (speedControl.valueAsNumber !== null && speedControl.valueAsNumber >= 0 ? speedControl.valueAsNumber : speedControlValue));
+    }
+
     return (<>
         <BrainFuckList className="AppBrainFuckList" resetButtonId="AppResetBrainFuck" runButtonId="AppRunOverBrainFuck" inputId="AppBrainFuckInput" onUpdate={onUpdateBrainFuck} updateIntervalId="AppSpeedControl"/>
         <form className="AppBrainFuckInput" onSubmit={InputSubmit}>
-            <input className="AppTextInput BoxLeft" id="AppBrainFuckInput" type="text" required={true}
-                   onInput={InputWriteCharacter} onPaste={InputPasteCharacter}/>
+            {!currentlyRunning ? <input className="AppTextInput BoxLeft" id="AppBrainFuckInput" type="text" required={true}
+                    onInput={InputWriteCharacter} onPaste={InputPasteCharacter} defaultValue={currentInput.current}/> :
+                <div className="AppDivInput BoxLeft" id="AppBrainFuckInput">
+                    {currentInput.current}
+                </div>}
             <div>
                 <input className="AppButton AppButtonNumberInput BoxMiddle AppDelayTooltip" id="AppSpeedControl"
-                       type="number" defaultValue={100}/>
+                       type="number" defaultValue={speedControlValue} min={0} onBlur={onInputSpeed}/>
                 <span className="AppTooltip">Millisecond delay</span>
             </div>
             <input className={`${currentlyRunning ? "AppDisabledButton" : "AppButton"} BoxMiddle`} id="AppResetBrainFuck" type="button" value="reset" onClick={Reset} disabled={currentlyRunning}/>
