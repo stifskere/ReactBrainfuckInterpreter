@@ -1,16 +1,18 @@
 import {Global} from "./Global";
+import {MutableRefObject} from "react";
 
 class BrainFuckManager {
     onUpdate: (instruction: number, index: number, output: string, last: boolean) => void;
     array: Array<number> = Array(30000).fill(0);
     current: number = 0;
     outputCharacters: string = "";
-    private updateIntervalId: {ref: number} = {ref: 100};
+    private updateInterval: MutableRefObject<number>;
     private instanceAlreadyRunning: boolean = false;
     private stop: boolean = false;
 
-    constructor(onUpdate: (instruction: number, index: number, output: string, last: boolean) => void) {
+    constructor(onUpdate: (instruction: number, index: number, output: string, last: boolean) => void, updateInterval: MutableRefObject<number>) {
         this.onUpdate = onUpdate;
+        this.updateInterval = updateInterval;
     }
 
     get getCurrentArray(): Array<number | null> {
@@ -24,17 +26,13 @@ class BrainFuckManager {
         return value;
     }
 
-    set setUpdateInteval(value: number) {
-        this.updateIntervalId.ref = value;
-    }
-
     stopCurrentExecution(): void {
         if (this.instanceAlreadyRunning)
             this.stop = true;
     }
 
     async runBrainFuck(code: string) {
-        if (this.instanceAlreadyRunning || Global.hasUnclosedLoops(code))
+        if (this.instanceAlreadyRunning || Global.hasUnclosedLoops(code) || !Global.isValidBrainfuck(code))
             return;
 
         this.instanceAlreadyRunning = true;
@@ -107,7 +105,7 @@ class BrainFuckManager {
                     break;
             }
 
-            await Global.Delay(this.updateIntervalId.ref);
+            await Global.Delay(this.updateInterval.current);
             this.onUpdate(i, this.current, this.outputCharacters, i === code.length - 1);
         }
 

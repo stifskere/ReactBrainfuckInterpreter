@@ -16,6 +16,12 @@ function App(): ReactElement {
 
         const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
 
+        if (!currentlyRunning && !Global.isValidBrainfuck(element.value)) {
+            setCurrentlyRunning(false);
+            await Global.CustomAlert("Error", "Your code seems to have invalid characters, please avoid using \"force paste\".");
+            return;
+        }
+
         if (!currentlyRunning && Global.hasUnclosedLoops(element.value)) {
             setCurrentlyRunning(false);
             await Global.CustomAlert("Error", "The code contains loops which are not closed.");
@@ -26,8 +32,7 @@ function App(): ReactElement {
     }
 
     function Reset() {
-        const element: HTMLTextAreaElement = document.getElementById("AppBrainFuckOutput") as HTMLTextAreaElement;
-        element.value = "";
+        (document.getElementById("AppBrainFuckOutput") as HTMLTextAreaElement).value = "";
     }
 
     function InputWriteCharacter(): void {
@@ -85,14 +90,14 @@ function App(): ReactElement {
         return () => clearInterval(interval);
     });
 
-    const [speedControlValue, setSpeedControlValue] = useState(100);
+    const speedControlValue: MutableRefObject<number> = useRef(100);
     function onInputSpeed(): void {
         const speedControl: HTMLInputElement = document.getElementById("AppSpeedControl") as HTMLInputElement;
-        setSpeedControlValue(speedControl.valueAsNumber = (speedControl.valueAsNumber !== null && speedControl.valueAsNumber >= 0 ? speedControl.valueAsNumber : speedControlValue));
+        speedControlValue.current = (speedControl.valueAsNumber = (speedControl.valueAsNumber !== null && speedControl.valueAsNumber >= 0 ? speedControl.valueAsNumber : speedControlValue.current));
     }
 
     return (<>
-        <BrainFuckList className="AppBrainFuckList" resetButtonId="AppResetBrainFuck" runButtonId="AppRunOverBrainFuck" inputId="AppBrainFuckInput" onUpdate={onUpdateBrainFuck} updateIntervalId="AppSpeedControl"/>
+        <BrainFuckList className="AppBrainFuckList" resetButtonId="AppResetBrainFuck" runButtonId="AppRunOverBrainFuck" inputId="AppBrainFuckInput" onUpdate={onUpdateBrainFuck} updateIntervalId={speedControlValue}/>
         <form className="AppBrainFuckInput" onSubmit={InputSubmit}>
             {!currentlyRunning ? <input className="AppTextInput BoxLeft" id="AppBrainFuckInput" type="text" required={true}
                     onInput={InputWriteCharacter} onPaste={InputPasteCharacter} defaultValue={currentInput.current}/> :
@@ -101,7 +106,7 @@ function App(): ReactElement {
                 </div>}
             <div>
                 <input className="AppButton AppButtonNumberInput BoxMiddle AppDelayTooltip" id="AppSpeedControl"
-                       type="number" defaultValue={speedControlValue} min={0} onBlur={onInputSpeed}/>
+                       type="number" defaultValue={speedControlValue.current} min={0} onBlur={onInputSpeed}/>
                 <span className="AppTooltip">Millisecond delay</span>
             </div>
             <input className={`${currentlyRunning ? "AppDisabledButton" : "AppButton"} BoxMiddle`} id="AppResetBrainFuck" type="button" value="reset" onClick={Reset} disabled={currentlyRunning}/>

@@ -1,17 +1,6 @@
-import {CSSProperties, SyntheticEvent} from "react";
+import {CSSProperties} from "react";
 
 export namespace Global {
-    export module ColorScheme {
-        export const background: string = "#E2DCDE";
-        export const primaryItems: string = "#00B4D8";
-        export const secondaryItems: string = "#0077B6";
-        export const terciaryItems: string = "#2D2D34";
-    }
-
-    export function PreventDefault(e: SyntheticEvent): void {
-        e.preventDefault();
-    }
-
     export interface IStyleArgument {
         className?: string | null;
         style?: CSSProperties | null;
@@ -116,5 +105,12 @@ export namespace Global {
         const input: HTMLElement = document.getElementById(inputId)!;
         if (input instanceof HTMLDivElement)
             input.innerHTML = `${input.textContent!.slice(0, index)}<span class="HighLightedInputCharacter">${input.textContent![index]}</span>${input.textContent!.slice(index + 1)}`;
+    }
+
+    export function isValidBrainfuck(code: string): boolean {
+        for (const char of code)
+            if (!("<>+-.,[]".split("")).includes(char))
+                return false;
+        return true;
     }
 }
