@@ -50,14 +50,13 @@ function App(): ReactElement {
         event.preventDefault();
 
         let data: Array<string> = event.clipboardData.getData("text").split("");
+        const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
 
         for (let i = 0; i < data.length; i++)
             if (!"><+-[],.".includes(data[i]))
                 data.splice(i--, 1);
 
-        const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
-        element.value += data.join("");
-
+        element.value =  element.value.substring(0, element.selectionStart!) + data.join("") +  element.value.substring(element.selectionEnd!);
         currentInput.current = element.value;
     }
 
