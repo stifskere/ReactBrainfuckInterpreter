@@ -1,7 +1,7 @@
 
 # React Brainfuck Interpreter
 
-This is a simple Brainfuck interpreter built with React. It allows you to write and execute Brainfuck programs in your web browser. (i made it in less than 1h)
+This is a simple Brainfuck interpreter built with React. It allows you to write and execute Brainfuck programs in your web browser.
 
 ## What is Brainfuck?
 
@@ -13,6 +13,7 @@ Brainfuck is an esoteric programming language created in 1993 by Urban Müller. 
 - Persistent memory
 - [Stolen manual](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a)
 - Dynamic memory viewer
+- BrainFuck generator
 
 ## Getting Started
 
@@ -46,13 +47,10 @@ Once you have the interpreter up and running, you can start writing and executin
 - **Output**: The program has an output for the . instruction.
 - **Stolen manual**: You can always check reference right next to your program output.
 - **Cursor**: When running the program there will be a cursor that shows the instruction being run.
+- **BrainFuck generator**: Clicking the output box will open a prompt asking to generate text, impl translated from [original program made in java](https://codegolf.stackexchange.com/questions/5418/brainf-golfer/5440#5440)
 
 Feel free to explore the interface and experiment with different Brainfuck programs!
 
 ## Contributing
 
 Contributions are welcome! If you find a bug or have a feature request, please open an issue on the GitHub repository. If you would like to contribute code, fork the repository, create a new branch, and submit a pull request.
-
-### Addition
-
-This readme was half made with ChatGPT because I was lazy to make a readme.

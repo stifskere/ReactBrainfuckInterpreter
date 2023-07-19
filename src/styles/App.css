@@ -80,16 +80,52 @@
     margin: 1vw 2vw 1vw 2vw;
 }
 
+.AppBrainFuckOutputDiv {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.AppBrainFuckOutputGenerateText {
+    position: absolute;
+
+    top: 5%;
+    left: 4%;
+
+    width: 92.4%;
+    height: 101.1%;
+
+    z-index: 1;
+
+    background-color: #0000008f;
+
+    display: none;
+
+    pointer-events: none;
+
+    border-radius: 8px;
+
+    text-align: center;
+    color: white;
+
+    cursor: default;
+}
+
+.AppBrainFuckOutputDiv:hover .AppBrainFuckOutputGenerateText {
+    display: block;
+}
+
 .AppBrainFuckOutput {
     background-color: white;
 
     resize: none;
 
     outline: transparent;
+
     border-color: transparent;
     border-radius: 8px;
 
-    width: 44.75%;
+    width: 90%;
     height: 100%;
 
     margin: 3vh 2vw;
@@ -98,6 +134,8 @@
 
     overflow-y: scroll;
     overflow-x: hidden;
+
+    cursor: default;
 }
 
 .AppBottom {

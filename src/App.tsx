@@ -6,6 +6,7 @@ import "./styles/Alert.css"
 import ReactMarkdown from "react-markdown";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {atomDark as theme} from "react-syntax-highlighter/dist/esm/styles/prism";
+import BrainFuckManager from "./Modules/BrainFuckManager";
 
 function App(): ReactElement {
     const [currentlyRunning, setCurrentlyRunning] = useState(false);
@@ -31,7 +32,7 @@ function App(): ReactElement {
         setCurrentlyRunning(!currentlyRunning);
     }
 
-    function Reset() {
+    function Reset(): void {
         (document.getElementById("AppBrainFuckOutput") as HTMLTextAreaElement).value = "";
     }
 
@@ -60,9 +61,10 @@ function App(): ReactElement {
         currentInput.current = element.value;
     }
 
-    function onUpdateBrainFuck(instruction: number, index: number, output: string, last: boolean) {
+    function onUpdateBrainFuck(instruction: number, index: number, output: string, last: boolean): void {
         const textArea: HTMLTextAreaElement = document.getElementById("AppBrainFuckOutput") as HTMLTextAreaElement;
-        textArea.value = output;
+        if (textArea.value !== output)
+            textArea.value = output;
 
         Global.highlightCharacter(instruction, "AppBrainFuckInput");
 
@@ -95,6 +97,19 @@ function App(): ReactElement {
         speedControlValue.current = (speedControl.valueAsNumber = (speedControl.valueAsNumber !== null && speedControl.valueAsNumber >= 0 ? speedControl.valueAsNumber : speedControlValue.current));
     }
 
+    async function handleGenerateBrainFuck() {
+        if (currentlyRunning)
+            return;
+
+        const element: HTMLInputElement = document.getElementById("AppBrainFuckInput") as HTMLInputElement;
+        const text: string | null = await Global.CustomPrompt("Write something", 100);
+
+        if (!text)
+            return;
+
+        currentInput.current = (element.value = BrainFuckManager.textToBrainFuck(text));
+    }
+
     return (<>
         <BrainFuckList className="AppBrainFuckList" resetButtonId="AppResetBrainFuck" runButtonId="AppRunOverBrainFuck" inputId="AppBrainFuckInput" onUpdate={onUpdateBrainFuck} updateIntervalId={speedControlValue}/>
         <form className="AppBrainFuckInput" onSubmit={InputSubmit}>
@@ -112,7 +127,13 @@ function App(): ReactElement {
             <input className={`AppButton BoxRight ${currentlyRunning ? "AppStopButton" : ""}`} id="AppRunOverBrainFuck" type="submit" value={!currentlyRunning ? "run over" : "stop"}/>
         </form>
         <div className="AppBottom">
-            <textarea id="AppBrainFuckOutput" className="AppBrainFuckOutput" readOnly={true} style={{fontSize: "4vh"}}/>
+            <div className="AppBrainFuckOutputDiv">
+                <div className="AppBrainFuckOutputGenerateText">
+                    <h1>Click to generate some text</h1>
+                    <p>({currentlyRunning ? "Please stop the program first" : "The current code will be replaced"})</p>
+                </div>
+                <textarea id="AppBrainFuckOutput" className="AppBrainFuckOutput" readOnly={true} style={{fontSize: "4vh"}} onClick={handleGenerateBrainFuck}/>
+            </div>
             <ReactMarkdown children={manualContent} className="AppBrainFuckOutput" components={{
                 code({node, inline, className, children, ...props}) {
                     const match = /language-(\w+)/.exec(className || '')

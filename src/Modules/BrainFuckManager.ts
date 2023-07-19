@@ -111,6 +111,62 @@ class BrainFuckManager {
 
         this.instanceAlreadyRunning = false;
     }
+
+    static textToBrainFuck(text: string): string {
+        function repeat(s: string, n: number): string {
+            let b: string = '';
+
+            for (let i = 0; i < n; i++) {
+                b += s;
+            }
+
+            return b;
+        }
+
+        const g: string[][] = new Array(256);
+
+        for (let x = 0; x < 256; x++) {
+            g[x] = new Array(256);
+
+            for (let y = 0; y < 256; y++) {
+                let delta: number = y - x;
+
+                if (delta > 128) {
+                    delta -= 256;
+                }
+
+                if (delta < -128) {
+                    delta += 256;
+                }
+
+                if (delta >= 0) {
+                    g[x][y] = repeat('+', delta);
+                } else {
+                    g[x][y] = repeat('-', -delta);
+                }
+            }
+        }
+
+        let lastc: number = 0;
+        let output: string = '';
+
+        for (let i = 0; i < text.length; i++) {
+            const c: number = text.charCodeAt(i);
+            const a: string = g[lastc][c];
+            const b: string = g[0][c];
+
+            if (a.length <= b.length) {
+                output += a;
+            } else {
+                output += `>${b}`;
+            }
+
+            output += '.';
+            lastc = c;
+        }
+
+        return output;
+    }
 }
 
 export default BrainFuckManager;
