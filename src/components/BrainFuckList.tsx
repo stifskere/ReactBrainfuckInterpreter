@@ -51,6 +51,8 @@ function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIn
            
     }, [arrInitialState, inputId, resetButtonId, runButtonId, onListUpdate, updateIntervalId]);
 
+    const [showAsPtr, setShowAsPtr] = useState(false);
+
     return (
         <>
             <div className={`BrainFuckListBackground ${className ?? ""}`}>
@@ -61,7 +63,12 @@ function BrainFuckList({className, resetButtonId, runButtonId, inputId, updateIn
                 )}
             </div>
             <div className="BrainFuckListIndex">
-                <p>ptr: {bfManager.current.current + 1}</p>
+                <p style={{cursor: "default"}} onClick={() => setShowAsPtr(!showAsPtr)}>
+                    {!showAsPtr ?
+                    <>ptr<span style={{color: "var(--secondaryItems)"}}>:</span> {bfManager.current.current + 1}</> :
+                        <><span style={{color: "var(--primaryItems)"}}>char</span><span style={{color: "var(--secondaryItems)"}}>*</span> ptr <span style={{color: "var(--secondaryItems)"}}>=</span> <span style={{color: "var(--secondaryItems)"}}>(</span>addr{bfManager.current.current === 0 ? "" : <> <span style={{color: "var(--secondaryItems)"}}>+</span> <span style={{color: "var(--primaryItems)"}}>0x{(bfManager.current.current).toString(16).toUpperCase()}</span></>}<span style={{color: "var(--secondaryItems)"}}>)</span>;
+                    </>}
+                </p>
             </div>
         </>
     );
