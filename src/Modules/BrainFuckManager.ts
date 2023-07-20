@@ -113,17 +113,7 @@ class BrainFuckManager {
     }
 
     static textToBrainFuck(text: string): string {
-        function repeat(s: string, n: number): string {
-            let b: string = '';
-
-            for (let i = 0; i < n; i++) {
-                b += s;
-            }
-
-            return b;
-        }
-
-        const g: string[][] = new Array(256);
+        const g: Array<Array<string>> = new Array(256);
 
         for (let x = 0; x < 256; x++) {
             g[x] = new Array(256);
@@ -131,19 +121,19 @@ class BrainFuckManager {
             for (let y = 0; y < 256; y++) {
                 let delta: number = y - x;
 
-                if (delta > 128) {
+                if (delta > 128)
                     delta -= 256;
-                }
 
-                if (delta < -128) {
+
+                if (delta < -128)
                     delta += 256;
-                }
 
-                if (delta >= 0) {
-                    g[x][y] = repeat('+', delta);
-                } else {
-                    g[x][y] = repeat('-', -delta);
-                }
+
+                if (delta >= 0)
+                    g[x][y] = '+'.repeat(delta);
+                else
+                    g[x][y] = '-'.repeat(-delta);
+
             }
         }
 
