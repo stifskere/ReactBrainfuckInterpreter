@@ -1,6 +1,9 @@
 
 # React Brainfuck Interpreter
 
+> [!warning]
+> This project was part of my react learning experience, thus this is not updated anymore since then, I will leave this in here for history, I don't expect to have it up anymore.
+
 This is a simple Brainfuck interpreter built with React. It allows you to write and execute Brainfuck programs in your web browser.
 
 ## What is Brainfuck?
